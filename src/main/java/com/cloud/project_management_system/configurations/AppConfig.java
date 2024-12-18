@@ -1,8 +1,14 @@
 package com.cloud.project_management_system.configurations;
 
+import com.cloud.project_management_system.service.CustomUserDetailsImpl;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -19,7 +25,9 @@ import java.util.List;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class AppConfig {
+  private  final CustomUserDetailsImpl customUserDetails;
 
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http)throws Exception{
@@ -37,6 +45,20 @@ public class AppConfig {
   @Bean
   PasswordEncoder passwordEncoder(){
     return new BCryptPasswordEncoder();
+  }
+
+  @Bean
+  public AuthenticationProvider authenticationProvider(){
+    DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
+    daoAuthenticationProvider.setUserDetailsService(customUserDetails);
+    daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
+
+    return  daoAuthenticationProvider;
+  }
+
+  @Bean
+  public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+    return authenticationConfiguration.getAuthenticationManager();
   }
 
   private CorsConfigurationSource configurationSource(){
