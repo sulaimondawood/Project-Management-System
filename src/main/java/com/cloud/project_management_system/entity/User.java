@@ -25,8 +25,14 @@ public class User implements UserDetails {
   private String password;
 
   @JsonIgnore
-  @OneToMany(mappedBy = "assignees", cascade = CascadeType.ALL)
-  List<Issue> assignedIssues = new ArrayList<>();
+  @OneToMany(mappedBy = "assignee", cascade = CascadeType.ALL)
+  private List<Issue> assignedIssues = new ArrayList<>();
+
+  @OneToMany(mappedBy = "owner",cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<Project> project;
+
+  @ManyToMany
+  private List<Project> projects;
 
   private int projectSize;
 

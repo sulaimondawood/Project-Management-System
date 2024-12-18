@@ -35,6 +35,7 @@ public class AppConfig {
         .authorizeHttpRequests(authorizedRequest->authorizedRequest.requestMatchers("/api/**").authenticated()
             .anyRequest().permitAll())
         .addFilterBefore(new JwtTokenValidator(), BasicAuthenticationFilter.class)
+        .authenticationProvider(authenticationProvider())
         .csrf(csrf->csrf.disable())
         .cors(httpSecurityCorsConfigurer -> httpSecurityCorsConfigurer.configurationSource(configurationSource()));
 
