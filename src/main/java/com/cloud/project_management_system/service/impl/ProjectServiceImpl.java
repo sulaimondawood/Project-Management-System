@@ -44,23 +44,32 @@ public class ProjectServiceImpl implements IProjectService {
   }
 
   @Override
-  public Project updateProject(Project project, Long projectId, User user) throws ProjectException {
-    return null;
+  public Project updateProject(Project project, Long projectId) throws ProjectException {
+    Project updateProject = getProjectById(projectId);
+
+    if(project.getTags() != null) updateProject.setTags(project.getTags());
+    if(project.getName() != null) updateProject.setName(project.getName());
+    if(project.getDescription() != null) updateProject.setDescription(project.getDescription());
+    if(project.getCategory() != null) updateProject.setCategory(project.getCategory());
+
+    return  projectRepository.save(updateProject);
   }
 
   @Override
   public void deleteProject(Long projectId, Long userId) throws ProjectException {
+    getProjectById(projectId);
+    projectRepository.deleteById(projectId);
 
   }
 
   @Override
   public List<Project> getAllProject() throws ProjectException {
-    return List.of();
+    return projectRepository.findAll();
   }
 
   @Override
   public Project getProjectById(Long projectId) throws ProjectException {
-    return null;
+    return projectRepository.findById(projectId).orElseThrow(()->new ProjectException("Project not found"));
   }
 
   @Override
@@ -72,7 +81,7 @@ public class ProjectServiceImpl implements IProjectService {
           .toList();
     }
     if(tag != null){
-      projects = projects.stream().filter(project -> project.getTags().equals(tag))
+      projects = projects.stream().filter(project -> project.getTags().contains(tag))
           .toList();
     }
     return projects;

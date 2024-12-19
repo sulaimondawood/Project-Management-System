@@ -10,7 +10,7 @@ public interface IProjectService {
 
   Project createProject(Project project, User user) throws ProjectException;
 
-  Project updateProject(Project project, Long projectId, User user) throws ProjectException;
+  Project updateProject(Project project, Long projectId) throws ProjectException;
 
   void deleteProject(Long projectId, Long userId) throws ProjectException;
 
