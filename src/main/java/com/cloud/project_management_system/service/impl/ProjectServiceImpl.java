@@ -11,6 +11,7 @@ import lombok.Data;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Data
@@ -64,7 +65,17 @@ public class ProjectServiceImpl implements IProjectService {
 
   @Override
   public List<Project> getProjectByTeam(User user, String category, String tag) throws ProjectException {
-    return List.of();
+    List<Project> projects = projectRepository.findByTeamContainingOrOwner(user,user);
+
+    if(category != null){
+      projects = projects.stream().filter(project -> project.getCategory().equals(category))
+          .toList();
+    }
+    if(tag != null){
+      projects = projects.stream().filter(project -> project.getTags().equals(tag))
+          .toList();
+    }
+    return projects;
   }
 
   @Override
