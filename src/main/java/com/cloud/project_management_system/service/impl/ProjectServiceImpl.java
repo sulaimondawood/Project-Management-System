@@ -1,23 +1,24 @@
 package com.cloud.project_management_system.service.impl;
 
-import com.cloud.project_management_system.entity.Chat;
-import com.cloud.project_management_system.entity.Project;
-import com.cloud.project_management_system.entity.User;
+import com.cloud.project_management_system.model.Chat;
+import com.cloud.project_management_system.model.Project;
+import com.cloud.project_management_system.model.User;
 import com.cloud.project_management_system.exceptions.ProjectException;
 import com.cloud.project_management_system.repository.ChatRepository;
 import com.cloud.project_management_system.repository.ProjectRepository;
+import com.cloud.project_management_system.repository.UserRepository;
 import com.cloud.project_management_system.service.interfaces.IProjectService;
 import lombok.Data;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Data
 public class ProjectServiceImpl implements IProjectService {
 
   private final ProjectRepository projectRepository;
+  private final UserRepository userRepository;
   private final ChatRepository chatRepository;
   private final ChatServiceImpl chatService;
 
@@ -89,11 +90,42 @@ public class ProjectServiceImpl implements IProjectService {
 
   @Override
   public void addUserToProject(Long projectId, Long userId) throws ProjectException {
+    Project project = getProjectById(projectId);
+    User user = userRepository.findById(projectId).orElseThrow(()->new ProjectException("User not found"));
+
+    if(!project.getTeam().contains(user)){
+      project.getTeam().add(user);
+      project.getChat().getUsers().add(user);
+
+      projectRepository.save(project);
+    }
 
   }
 
   @Override
   public void removeUserFromProject(Long projectId, Long userId) throws ProjectException {
+    Project project = getProjectById(projectId);
+    User user = userRepository.findById(userId).orElseThrow(()->new ProjectException("User not found"));
+
+    if(project.getTeam().contains(user)){
+      project.getTeam().remove(user);
+      project.getChat().getUsers().remove(user);
+
+      projectRepository.save(project);
+    }
 
   }
+
+  @Override
+  public Chat getChatByProjectId(Long projectId) throws ProjectException {
+    Project project = getProjectById(projectId);
+    return project.getChat();
+  }
+
+  @Override
+  public List<Project> searchProject(String keyword, User user) throws ProjectException {
+    String partialKeyword = "%" + keyword + "%";
+    return projectRepository.findByNameContainingAndTeamContains(partialKeyword, user);
+  }
+
 }

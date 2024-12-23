@@ -1,4 +1,4 @@
-package com.cloud.project_management_system.entity;
+package com.cloud.project_management_system.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

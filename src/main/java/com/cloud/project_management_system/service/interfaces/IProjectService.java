@@ -1,7 +1,8 @@
 package com.cloud.project_management_system.service.interfaces;
 
-import com.cloud.project_management_system.entity.Project;
-import com.cloud.project_management_system.entity.User;
+import com.cloud.project_management_system.model.Chat;
+import com.cloud.project_management_system.model.Project;
+import com.cloud.project_management_system.model.User;
 import com.cloud.project_management_system.exceptions.ProjectException;
 
 import java.util.List;
@@ -23,4 +24,8 @@ public interface IProjectService {
   void addUserToProject(Long projectId, Long userId) throws  ProjectException;
 
   void removeUserFromProject(Long projectId, Long userId) throws ProjectException;
+
+  Chat getChatByProjectId(Long projectId) throws ProjectException;
+
+  List<Project> searchProject(String keyword, User  user) throws  ProjectException;
 }

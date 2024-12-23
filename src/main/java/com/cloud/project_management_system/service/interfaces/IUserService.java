@@ -1,6 +1,6 @@
 package com.cloud.project_management_system.service.interfaces;
 
-import com.cloud.project_management_system.entity.User;
+import com.cloud.project_management_system.model.User;
 import com.cloud.project_management_system.exceptions.ProjectException;
 
 import java.util.List;

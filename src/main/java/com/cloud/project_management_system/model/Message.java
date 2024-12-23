@@ -1,4 +1,4 @@
-package com.cloud.project_management_system.entity;
+package com.cloud.project_management_system.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -8,20 +8,20 @@ import lombok.Data;
 
 import java.time.LocalDateTime;
 
-@Entity
 @Data
-public class Comment {
+@Entity
+public class Message {
 
   @Id
   @GeneratedValue
   private Long id;
 
-  private String comment;
+  private String message;
   private LocalDateTime createdAt;
 
   @ManyToOne
-  private User user;
+  private User sender;
 
   @ManyToOne
-  private Issue issue;
+  private Chat chat;
 }

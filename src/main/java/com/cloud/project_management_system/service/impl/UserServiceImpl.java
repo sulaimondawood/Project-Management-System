@@ -1,7 +1,7 @@
 package com.cloud.project_management_system.service.impl;
 
 import com.cloud.project_management_system.configurations.JwtProvider;
-import com.cloud.project_management_system.entity.User;
+import com.cloud.project_management_system.model.User;
 import com.cloud.project_management_system.exceptions.ProjectException;
 import com.cloud.project_management_system.repository.UserRepository;
 import com.cloud.project_management_system.service.interfaces.IUserService;
