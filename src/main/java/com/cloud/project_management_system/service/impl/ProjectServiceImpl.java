@@ -64,7 +64,7 @@ public class ProjectServiceImpl implements IProjectService {
   }
 
   @Override
-  public List<Project> getAllProject() throws ProjectException {
+  public List<Project> getAllProjects() throws ProjectException {
     return projectRepository.findAll();
   }
 

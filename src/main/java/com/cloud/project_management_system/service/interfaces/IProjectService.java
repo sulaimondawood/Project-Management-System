@@ -15,7 +15,7 @@ public interface IProjectService {
 
   void deleteProject(Long projectId, Long userId) throws ProjectException;
 
-  List<Project> getAllProject() throws  ProjectException;
+  List<Project> getAllProjects() throws  ProjectException;
 
   Project getProjectById(Long projectId) throws  ProjectException;
 

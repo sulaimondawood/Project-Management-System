@@ -23,7 +23,7 @@ public class UserServiceImpl implements IUserService {
   }
 
   @Override
-  public User findUserProjectByJwt(String jwt) throws ProjectException {
+  public User findUserProfileByJwt(String jwt) throws ProjectException {
     String email = jwtProvider.extractEmail(jwt);
    return findUserByEmail(email);
   }

@@ -25,7 +25,7 @@ public class JwtProvider {
 
 
   public String extractEmail(String jwt){
-    return extractClaims(jwt, Claims::getSubject);
+    return extractClaims(jwt.trim(), Claims::getSubject);
   }
 
   private <T> T extractClaims(String jwt, Function<Claims, T> claimFunction){

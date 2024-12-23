@@ -9,12 +9,13 @@ public interface IUserService {
 
   List<User> findAllUsers() throws ProjectException;
 
-  User findUserProjectByJwt(String jwt) throws ProjectException;
+  User findUserProfileByJwt(String jwt) throws ProjectException;
 
   User findUserByEmail(String email) throws ProjectException;
 
   User findUserById(Long userId) throws  ProjectException;
 
   User updateUserProjectSize(User user, int number);
+
 
 }
