@@ -2,6 +2,7 @@ package com.cloud.project_management_system.configurations;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -13,8 +14,7 @@ import java.util.function.Function;
 @Service
 public class JwtProvider {
   private static final long EXPIRATION_TIME = 1000 * 60 * 60 * 24 * 7;
-  private final SecretKey SECRET_KEY = Keys.hmacShaKeyFor(
-      JwtConstant.SECRET_KEY.getBytes());
+  private final SecretKey SECRET_KEY = Keys.hmacShaKeyFor(Decoders.BASE64.decode(JwtConstant.SECRET_KEY));
 
   public String generateToken(UserDetails userDetails){
    return Jwts.builder().issuedAt(new Date(System.currentTimeMillis()))
@@ -29,6 +29,7 @@ public class JwtProvider {
   }
 
   private <T> T extractClaims(String jwt, Function<Claims, T> claimFunction){
+    System.out.println(claimFunction.apply(Jwts.parser().verifyWith(SECRET_KEY).build().parseSignedClaims(jwt).getPayload()));
     return claimFunction.apply(Jwts.parser().verifyWith(SECRET_KEY).build().parseSignedClaims(jwt).getPayload());
   }
 

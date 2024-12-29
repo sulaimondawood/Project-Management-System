@@ -1,5 +1,5 @@
 package com.cloud.project_management_system.configurations;
 
 public class JwtConstant {
-  public static String SECRET_KEY = "theldkw394wdfjekrktkdgrjgor feojgeogjefjwfwjosjnsnnvsvnrutsmewoerieourieurwijdksdeefhdjdjschjdfhjdhj";
+  public static String SECRET_KEY = "a3hqbzg1OWFyZTk2djZtcGJjdDNyb3kzMWJrMTl6NGZyczNicXhidmxiamw3NGhxNHdlM3RvdjY0ZGt6Nncwanp6Z3dlM3N3NG8zM2NuZnI4MnZ3MjRkcXp6cGpobzBqc3E2bHNpc2pva29yem1jcjQ1bjNxcnJ4M3EyaHRwNWE=";
 }
