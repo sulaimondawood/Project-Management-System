@@ -1,6 +1,7 @@
 package com.cloud.project_management_system.controller;
 
 import com.cloud.project_management_system.exceptions.ProjectException;
+import com.cloud.project_management_system.model.Chat;
 import com.cloud.project_management_system.model.Project;
 import com.cloud.project_management_system.model.User;
 import com.cloud.project_management_system.response.MessageResponse;
@@ -74,6 +75,23 @@ public class ProjectController {
     User user = userService.findUserProfileByJwt(authJwt);
     projectService.deleteProject(projectId,user.getId());
     return new ResponseEntity<>(messageResponse, HttpStatus.OK);
+  }
+
+  @GetMapping("/search")
+  public ResponseEntity<List<Project>> searchProject(@RequestHeader("Authorization") String jwt,
+                                                     @RequestParam(required = false) String keyword) throws ProjectException{
+
+    User user = userService.findUserProfileByJwt(jwt);
+    List<Project> projects = projectService.searchProject(keyword, user);
+
+    return new ResponseEntity<>(projects,HttpStatus.OK);
+  }
+
+  @GetMapping("/{projectId}/chat")
+  public ResponseEntity<Chat> getChatByProjectId(@PathVariable Long projectId) throws ProjectException{
+
+    Chat chat = projectService.getChatByProjectId(projectId);
+    return  new ResponseEntity<>(chat,HttpStatus.OK);
   }
 
 }
