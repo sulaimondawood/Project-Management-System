@@ -8,7 +8,7 @@ import com.cloud.project_management_system.model.Project;
 import com.cloud.project_management_system.model.User;
 import com.cloud.project_management_system.repository.InvitationRepository;
 import com.cloud.project_management_system.response.MessageResponse;
-import com.cloud.project_management_system.service.impl.InvitaionImpl;
+import com.cloud.project_management_system.service.impl.InvitationImpl;
 import com.cloud.project_management_system.service.impl.ProjectServiceImpl;
 import com.cloud.project_management_system.service.impl.UserServiceImpl;
 import lombok.Data;
@@ -25,7 +25,7 @@ public class ProjectController {
 
   private final ProjectServiceImpl projectService;
   private final UserServiceImpl userService;
-  private final InvitaionImpl invitationService;
+  private final InvitationImpl invitationService;
   private final InvitationRepository invitationRepository;
 
   @GetMapping

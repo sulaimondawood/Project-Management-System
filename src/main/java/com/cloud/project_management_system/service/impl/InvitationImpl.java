@@ -11,7 +11,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class InvitaionImpl implements InvitationService {
+public class InvitationImpl implements InvitationService {
   private final InvitationRepository invitationRepository;
   private final EmailServiceImpl emailService;
 
