@@ -1,10 +1,14 @@
 package com.cloud.project_management_system.controller;
 
+import com.cloud.project_management_system.dto.InvitationRequest;
 import com.cloud.project_management_system.exceptions.ProjectException;
 import com.cloud.project_management_system.model.Chat;
+import com.cloud.project_management_system.model.Invitation;
 import com.cloud.project_management_system.model.Project;
 import com.cloud.project_management_system.model.User;
+import com.cloud.project_management_system.repository.InvitationRepository;
 import com.cloud.project_management_system.response.MessageResponse;
+import com.cloud.project_management_system.service.impl.InvitaionImpl;
 import com.cloud.project_management_system.service.impl.ProjectServiceImpl;
 import com.cloud.project_management_system.service.impl.UserServiceImpl;
 import lombok.Data;
@@ -21,6 +25,8 @@ public class ProjectController {
 
   private final ProjectServiceImpl projectService;
   private final UserServiceImpl userService;
+  private final InvitaionImpl invitationService;
+  private final InvitationRepository invitationRepository;
 
   @GetMapping
   public ResponseEntity<List<Project>> getAllProjects(
@@ -95,4 +101,20 @@ public class ProjectController {
     return  new ResponseEntity<>(chat,HttpStatus.OK);
   }
 
+  @PostMapping("/invitation")
+  public ResponseEntity<MessageResponse> projectInvitation(@RequestBody InvitationRequest req){
+    invitationService.sendInvitation(req.getEmail(), req.getProjectId());
+    MessageResponse res = new MessageResponse("User invitation sent");
+    return  new ResponseEntity<>(res, HttpStatus.OK);
+  }
+
+  @GetMapping("/accept_invitation")
+  public ResponseEntity<Invitation> acceptInvitation(@RequestHeader("Authorization") String jwt,
+                                                          @RequestParam String token){
+    User user = userService.findUserProfileByJwt(jwt);
+    Invitation invitation = invitationService.acceptInvitation(token,user.getId());
+    projectService.addUserToProject(invitation.getProjectId(), user.getId());
+
+    return new ResponseEntity<>(invitation, HttpStatus.ACCEPTED);
+  }
 }

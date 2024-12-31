@@ -7,7 +7,7 @@ public interface InvitationService {
 
   Invitation acceptInvitation(String token, Long userId);
 
-  void getTokenByUserEmail(String userEmail);
+  String getTokenByUserEmail(String userEmail);
 
   void deleteToken(String token);
 

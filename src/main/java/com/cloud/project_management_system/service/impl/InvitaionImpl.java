@@ -38,8 +38,9 @@ public class InvitaionImpl implements InvitationService {
   }
 
   @Override
-  public void getTokenByUserEmail(String userEmail) {
-
+  public String getTokenByUserEmail(String userEmail) {
+    Invitation invitation = invitationRepository.findByEmail(userEmail).orElseThrow(()->new ProjectException("Invitation not found"));
+    return invitation.getToken();
   }
 
   @Override
