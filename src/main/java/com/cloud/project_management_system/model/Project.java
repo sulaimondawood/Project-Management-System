@@ -34,4 +34,5 @@ public class Project {
 
   @ManyToMany(mappedBy = "projects", cascade = CascadeType.ALL)
   private List<User> team = new ArrayList<>();
+
 }
