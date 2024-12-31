@@ -15,7 +15,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -35,7 +34,7 @@ public class AppConfig {
     http.sessionManagement(Session->Session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .authorizeHttpRequests(authorizedRequest->authorizedRequest.requestMatchers("/api/**").authenticated()
             .anyRequest().permitAll())
-        .addFilterBefore(new JwtTokenValidator(), UsernamePasswordAuthenticationFilter.class)
+        .addFilterBefore(new JwtTokenValidator(), BasicAuthenticationFilter.class)
         .authenticationProvider(authenticationProvider())
         .csrf(csrf->csrf.disable())
         .cors(httpSecurityCorsConfigurer -> httpSecurityCorsConfigurer.configurationSource(configurationSource()));

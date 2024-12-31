@@ -25,11 +25,12 @@ public class JwtProvider {
 
 
   public String extractEmail(String jwt){
-    return extractClaims(jwt.trim(), Claims::getSubject);
+    jwt = jwt.substring(7);
+    System.out.println(jwt);
+    return extractClaims(jwt, Claims::getSubject);
   }
 
   private <T> T extractClaims(String jwt, Function<Claims, T> claimFunction){
-    System.out.println(claimFunction.apply(Jwts.parser().verifyWith(SECRET_KEY).build().parseSignedClaims(jwt).getPayload()));
     return claimFunction.apply(Jwts.parser().verifyWith(SECRET_KEY).build().parseSignedClaims(jwt).getPayload());
   }
 

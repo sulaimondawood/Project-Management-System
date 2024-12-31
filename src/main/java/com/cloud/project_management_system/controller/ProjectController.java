@@ -28,6 +28,7 @@ public class ProjectController {
       @RequestParam(required = false) String category,
       @RequestParam(required = false) String tag
   ) throws ProjectException {
+    System.out.println(authToken);
     User user = userService.findUserProfileByJwt(authToken);
     List<Project> projects = projectService.getProjectByTeam(user,category,tag);
     return new ResponseEntity<>(projects, HttpStatus.OK);

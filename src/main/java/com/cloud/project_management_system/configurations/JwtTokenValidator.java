@@ -2,12 +2,14 @@ package com.cloud.project_management_system.configurations;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.apache.coyote.BadRequestException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -20,16 +22,19 @@ import java.io.IOException;
 import java.util.List;
 
 public class JwtTokenValidator extends OncePerRequestFilter {
+  @Value("${app.jwt.key}")
+  String SECRET_KEY;
   @Override
   protected void doFilterInternal(HttpServletRequest request,
                                   HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
     String authHeader = request.getHeader("Authorization");
     String token;
+
     if(authHeader != null){
-      token = authHeader.substring(7).trim();
+      token = authHeader.substring(7);
       try {
-        SecretKey secretKey = Keys.hmacShaKeyFor(JwtConstant.SECRET_KEY.getBytes());
+        SecretKey secretKey = Keys.hmacShaKeyFor(Decoders.BASE64.decode(SECRET_KEY));
         Claims claims = Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload();
         String email = claims.getSubject();
         String authorities = String.valueOf(claims.get("authorities"));
