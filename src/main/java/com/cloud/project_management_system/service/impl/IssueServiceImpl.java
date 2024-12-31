@@ -11,7 +11,8 @@ import java.util.Optional;
 
 public class IssueServiceImpl implements IssueService  {
   @Override
-  public void createIssue(IssueRequest issue) throws ProjectException {
+  public void createIssue(IssueRequest issueRequest, Long userId) throws ProjectException {
+
     
   }
 

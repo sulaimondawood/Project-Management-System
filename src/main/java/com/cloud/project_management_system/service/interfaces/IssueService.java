@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface IssueService {
-  void createIssue(IssueRequest issue) throws ProjectException;
+  void createIssue(IssueRequest issueRequest, Long userId) throws ProjectException;
 
   void updateIssue(IssueRequest updateIssue, Long userId, Long issueId) throws ProjectException;
 
