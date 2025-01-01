@@ -19,9 +19,11 @@ import java.util.Optional;
 public class IssueServiceImpl implements IssueService  {
   private final ProjectServiceImpl projectService;
   private final IssueRepository issueRepository;
+  private final UserServiceImpl userService;
+
   @Override
   public void createIssue(IssueRequest issueRequest, Long userId) throws ProjectException {
-    Project project = projectService.getProjectById(issueRequest.getProjectId());
+    Project project = projectService.getProjectById(issueRequest.getProjectID());
 
     Issue issue = new Issue();
     issue.setTitle(issueRequest.getTitle());
@@ -29,7 +31,7 @@ public class IssueServiceImpl implements IssueService  {
     issue.setStatus(issueRequest.getStatus());
     issue.setDueDate(issueRequest.getDueDate());
     issue.setPriority(issueRequest.getPriority());
-    issue.setProjectId(issue.getProjectId());
+    issue.setProjectID(issue.getProjectID());
     issue.setProject(project);
 
     issueRepository.save(issue);
@@ -71,6 +73,7 @@ public class IssueServiceImpl implements IssueService  {
 
   @Override
   public List<Issue> getAssigneeIssues(Long assigneeId) throws ProjectException {
+
     return List.of();
   }
 
@@ -81,11 +84,18 @@ public class IssueServiceImpl implements IssueService  {
 
   @Override
   public Issue addUserToIssue(Long userId, Long issueId) throws ProjectException {
-    return null;
+    Issue issue = getIssueById(issueId);
+    User user = userService.findUserById(userId);
+
+    issue.setAssignee(user);
+    return issueRepository.save(issue);
   }
 
   @Override
   public void updateIssueStatus(Long issueId, String status) throws ProjectException {
+    Issue issue = getIssueById(issueId);
+    issue.setStatus(status);
 
+    issueRepository.save(issue);
   }
 }
