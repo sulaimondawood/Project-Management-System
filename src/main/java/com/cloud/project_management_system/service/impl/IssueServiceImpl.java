@@ -67,19 +67,28 @@ public class IssueServiceImpl implements IssueService  {
   }
 
   @Override
-  public List<Issue> searchIssues(String title, String status, String priority, Long assigneeId) throws ProjectException {
+  public List<Issue> searchIssues(String keyword, Long assigneeId) throws ProjectException {
+    User user = userService.findUserById(assigneeId);
+    if(assigneeId != null){
+      return issueRepository.findByAssignee(user);
+    }
+    if(keyword!=null){
+//      return issueRepository.findByTitleOrDescriptionAllIgnoreCaseContaining(keyword);
+    }
     return List.of();
   }
 
   @Override
   public List<Issue> getAssigneeIssues(Long assigneeId) throws ProjectException {
-
-    return List.of();
+    User user = userService.findUserById(assigneeId);
+    return issueRepository.findByAssignee(user);
   }
 
   @Override
   public List<User> getIssueAssigness(Long issueId) throws ProjectException {
-    return List.of();
+    Issue issue = getIssueById(issueId);
+    User user = issue.getAssignee();
+    return user != null? List.of(user):List.of();
   }
 
   @Override
