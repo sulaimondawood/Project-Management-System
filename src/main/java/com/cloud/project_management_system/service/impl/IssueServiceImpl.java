@@ -41,7 +41,22 @@ public class IssueServiceImpl implements IssueService  {
 
   @Override
   public void updateIssue(IssueRequest updateIssue, Long userId, Long issueId) throws ProjectException {
-
+    Issue issue = new Issue();
+    if(updateIssue.getTitle() != null){
+      issue.setTitle(updateIssue.getTitle());
+    }
+    if(updateIssue.getDescription() != null){
+      issue.setDescription(updateIssue.getDescription());
+    }
+    if(updateIssue.getDueDate() != null){
+      issue.setDueDate(updateIssue.getDueDate());
+    }
+    if(updateIssue.getStatus() != null){
+      issue.setStatus(updateIssue.getStatus());
+    }
+    if(updateIssue.getPriority() != null){
+      issue.setPriority(updateIssue.getPriority());
+    }
   }
 
   @Override
