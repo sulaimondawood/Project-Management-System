@@ -85,6 +85,7 @@ public class IssueController {
   ){
     User user = userService.findUserProfileByJwt(jwt);
     List<Issue> issues = issueService.getAssigneeIssues(user.getId());
+    return ResponseEntity.ok(issues);
   }
 
   @GetMapping("/{issueId}/assignees")
@@ -99,6 +100,14 @@ public class IssueController {
     Long user = userService.findUserProfileByJwt(jwt).getId();
     Issue issue = issueService.addUserToIssue(user, issueId);
     return ResponseEntity.ok(issue);
+  }
+
+  @PutMapping("/{issueId}/status")
+  public ResponseEntity<MessageResponse> updateIssueStatus(@RequestBody String status,
+                                                           @PathVariable Long issueId){
+    issueService.updateIssueStatus(issueId,status);
+    MessageResponse res = new MessageResponse("Status updated");
+    return ResponseEntity.ok(res);
   }
 
 
