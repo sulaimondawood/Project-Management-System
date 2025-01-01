@@ -63,5 +63,21 @@ public class IssueController {
     return  ResponseEntity.ok(issues);
   }
 
+  @DeleteMapping("/{issueId}")
+  public ResponseEntity<MessageResponse> deleteIssue(@PathVariable Long issueId, @RequestHeader String jwt){
+    User user = userService.findUserProfileByJwt(jwt);
+    issueService.deleteIssue(issueId,user.getId());
+    MessageResponse res = new MessageResponse("Issue deleted");
+    return ResponseEntity.status(HttpStatus.NO_CONTENT).body(res);
+  }
+
+  @GetMapping("/search")
+  public ResponseEntity<List<Issue>> searchIssues(@RequestBody String keyword,
+                                                  @RequestHeader("Authorization") String jwt){
+    User user = userService.findUserProfileByJwt(jwt);
+    List<Issue> issues = issueService.searchIssues(keyword,user.getId());
+    return ResponseEntity.ok(issues);
+  }
+
 
 }
