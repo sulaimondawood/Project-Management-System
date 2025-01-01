@@ -1,5 +1,6 @@
 package com.cloud.project_management_system.service.impl;
 
+import com.cloud.project_management_system.exceptions.ProjectException;
 import com.cloud.project_management_system.model.Comment;
 import com.cloud.project_management_system.model.Issue;
 import com.cloud.project_management_system.model.User;
@@ -27,6 +28,11 @@ public class CommentServiceImpl implements CommentService {
   }
 
   @Override
+  public List<Comment> getCommentByIssueId(Long issueId) {
+    return commentRepository.findByIssueId(issueId).orElseThrow(()->new ProjectException("No comment found yet"));
+  }
+
+  @Override
   public void createComment(String comment, Long userId, Long issueId) {
     Comment newComment = new Comment();
     User user = userService.findUserById(userId);
@@ -43,6 +49,13 @@ public class CommentServiceImpl implements CommentService {
 
   @Override
   public void deleteComment(Long userId, Long commentId) {
+    User user = userService.findUserById(userId);
+    Comment comment = commentRepository.findById(commentId).orElseThrow(()->new ProjectException("Comment not found"));
 
+    if(comment.getUser().equals(user)){
+      commentRepository.delete(comment);
+    }else{
+      throw new ProjectException("No permission to delete comment");
+    }
   }
 }
