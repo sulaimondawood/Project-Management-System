@@ -10,6 +10,7 @@ import com.cloud.project_management_system.service.interfaces.IssueService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -68,14 +69,15 @@ public class IssueServiceImpl implements IssueService  {
 
   @Override
   public List<Issue> searchIssues(String keyword, Long assigneeId) throws ProjectException {
+    List<Issue> issues = new ArrayList<>();
     User user = userService.findUserById(assigneeId);
     if(assigneeId != null){
-      return issueRepository.findByAssignee(user);
+      issues.addAll(issueRepository.findByAssignee(user));
     }
     if(keyword!=null){
-//      return issueRepository.findByTitleOrDescriptionAllIgnoreCaseContaining(keyword);
+      issues.addAll(issueRepository.findByTitleContainingIgnoreCase(keyword));
     }
-    return List.of();
+    return issues.stream().distinct().toList();
   }
 
   @Override
