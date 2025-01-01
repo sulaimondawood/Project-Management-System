@@ -79,5 +79,27 @@ public class IssueController {
     return ResponseEntity.ok(issues);
   }
 
+  @GetMapping("/assigneee/")
+  public ResponseEntity<List<Issue>> getAssigneeIssues(
+      @RequestHeader("Authorization") String jwt
+  ){
+    User user = userService.findUserProfileByJwt(jwt);
+    List<Issue> issues = issueService.getAssigneeIssues(user.getId());
+  }
+
+  @GetMapping("/{issueId}/assignees")
+  public ResponseEntity<List<User>> getIssueAssignees(@PathVariable Long issueId){
+    List<User> users = issueService.getIssueAssigness(issueId);
+    return ResponseEntity.ok(users);
+  }
+
+  @GetMapping("/{issueId}/users")
+  public  ResponseEntity<Issue> addUserToIssue(@PathVariable("issueId") Long issueId,
+                                               @RequestHeader("Authorization") String jwt){
+    Long user = userService.findUserProfileByJwt(jwt).getId();
+    Issue issue = issueService.addUserToIssue(user, issueId);
+    return ResponseEntity.ok(issue);
+  }
+
 
 }
