@@ -15,11 +15,11 @@ public interface IssueService {
 
   List<Issue> getAllIssues() throws ProjectException;
 
-  Optional<Issue> getIssueById(Long issueId) throws ProjectException;
+  Issue getIssueById(Long issueId) throws ProjectException;
 
   List<Issue> getIssuesByProjectId(Long projectId) throws ProjectException;
 
-  void deleteIssue(Long issueId) throws ProjectException;
+  void deleteIssue(Long issueId, Long userId) throws ProjectException;
 
   List<Issue> searchIssues(String title, String status, String priority, Long assigneeId) throws ProjectException;
 

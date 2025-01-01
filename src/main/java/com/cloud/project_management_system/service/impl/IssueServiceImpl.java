@@ -3,16 +3,36 @@ package com.cloud.project_management_system.service.impl;
 import com.cloud.project_management_system.dto.IssueRequest;
 import com.cloud.project_management_system.exceptions.ProjectException;
 import com.cloud.project_management_system.model.Issue;
+import com.cloud.project_management_system.model.Project;
 import com.cloud.project_management_system.model.User;
+import com.cloud.project_management_system.repository.IssueRepository;
 import com.cloud.project_management_system.service.interfaces.IssueService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+
+@Service
+@RequiredArgsConstructor
 public class IssueServiceImpl implements IssueService  {
+  private final ProjectServiceImpl projectService;
+  private final IssueRepository issueRepository;
   @Override
   public void createIssue(IssueRequest issueRequest, Long userId) throws ProjectException {
+    Project project = projectService.getProjectById(issueRequest.getProjectId());
 
+    Issue issue = new Issue();
+    issue.setTitle(issueRequest.getTitle());
+    issue.setDescription(issueRequest.getDescription());
+    issue.setStatus(issueRequest.getStatus());
+    issue.setDueDate(issueRequest.getDueDate());
+    issue.setPriority(issueRequest.getPriority());
+    issue.setProjectId(issue.getProjectId());
+    issue.setProject(project);
+
+    issueRepository.save(issue);
     
   }
 
@@ -23,22 +43,25 @@ public class IssueServiceImpl implements IssueService  {
 
   @Override
   public List<Issue> getAllIssues() throws ProjectException {
-    return List.of();
+    return issueRepository.findAll();
   }
 
   @Override
-  public Optional<Issue> getIssueById(Long issueId) throws ProjectException {
-    return Optional.empty();
+  public Issue getIssueById(Long issueId) throws ProjectException {
+    Issue issue = issueRepository.findById(issueId).orElseThrow(()->new ProjectException("Issue cannot be found"));
+    return issue;
   }
 
   @Override
   public List<Issue> getIssuesByProjectId(Long projectId) throws ProjectException {
-    return List.of();
+    List<Issue> issue = issueRepository.findByProjectId(projectId);
+    return issue;
   }
 
   @Override
-  public void deleteIssue(Long issueId) throws ProjectException {
-
+  public void deleteIssue(Long issueId, Long userId) throws ProjectException {
+    getIssueById(issueId);
+    issueRepository.deleteById(issueId);
   }
 
   @Override
