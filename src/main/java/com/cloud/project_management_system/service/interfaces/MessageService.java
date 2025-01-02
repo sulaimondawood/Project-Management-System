@@ -11,5 +11,7 @@ public interface MessageService {
 
   void deleteMessage(Long senderId, Long messageId, Long projectId);
 
-  List<Message> getAllMessages(Long projectId);
+  List<Message> getAllMessages();
+
+  List<Message> getMessagesByProjectId(Long projectId);
 }
