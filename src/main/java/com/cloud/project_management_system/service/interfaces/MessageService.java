@@ -7,11 +7,13 @@ import java.util.List;
 public interface MessageService {
   void sendMessage(Long senderId, Long projectId, String message);
 
-  void editMessage(Long senderId, Long projectId, Long messageId, String message);
+  void editMessage(Long senderId, Long messageId, String message);
 
-  void deleteMessage(Long senderId, Long messageId, Long projectId);
+  void deleteMessage(Long senderId, Long messageId);
 
   List<Message> getAllMessages();
+
+  Message getMessageById(Long messageId);
 
   List<Message> getMessagesByProjectId(Long projectId);
 }

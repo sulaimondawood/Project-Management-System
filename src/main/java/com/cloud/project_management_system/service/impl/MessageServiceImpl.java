@@ -3,12 +3,10 @@ package com.cloud.project_management_system.service.impl;
 import com.cloud.project_management_system.exceptions.ProjectException;
 import com.cloud.project_management_system.model.Chat;
 import com.cloud.project_management_system.model.Message;
-import com.cloud.project_management_system.model.Project;
 import com.cloud.project_management_system.model.User;
 import com.cloud.project_management_system.repository.MessageRepository;
 import com.cloud.project_management_system.service.interfaces.MessageService;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.query.Order;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -40,7 +38,7 @@ public class MessageServiceImpl implements MessageService {
   }
 
   @Override
-  public void editMessage(Long senderId, Long projectId, Long messageId, String message) {
+  public void editMessage(Long senderId,  Long messageId, String message) {
     User user = userService.findUserById(senderId);
     Message updateMessage = messageRepository.findById(messageId).orElseThrow(()->new ProjectException("No message found"));
 
@@ -53,7 +51,7 @@ public class MessageServiceImpl implements MessageService {
   }
 
   @Override
-  public void deleteMessage(Long senderId, Long messageId, Long projectId) {
+  public void deleteMessage(Long senderId, Long messageId) {
     User user = userService.findUserById(senderId);
     Message message = messageRepository.findById(messageId).orElseThrow(()->new ProjectException(("No message found")));
     if(user.equals(message.getSender())){
@@ -66,6 +64,10 @@ public class MessageServiceImpl implements MessageService {
   @Override
   public List<Message> getAllMessages() {
     return messageRepository.findAll();
+  }
+
+  public Message getMessageById(Long messageId){
+    return messageRepository.findById(messageId).orElseThrow(()->new ProjectException("No message found"));
   }
 
   @Override
