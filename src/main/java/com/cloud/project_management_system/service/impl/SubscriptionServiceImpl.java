@@ -22,6 +22,8 @@ public class SubscriptionServiceImpl implements SubscriptionService {
   @Override
   public void createSubscription(Long userId) {
     User user = userService.findUserById(userId);
+    try {
+
     Subscription subscription = new Subscription();
     subscription.setUser(user);
     subscription.setPlanType(Plan.FREE);
@@ -30,6 +32,12 @@ public class SubscriptionServiceImpl implements SubscriptionService {
     subscription.setSubscriptionEndDate(LocalDate.now().plusMonths(12));
 
     subscriptionRepository.save(subscription);
+    }catch (ProjectException e){
+      throw new ProjectException("Something went wrong");
+    }catch (Exception e){
+      throw new ProjectException("Internal server error");
+    }
+
 
   }
 
@@ -41,17 +49,39 @@ public class SubscriptionServiceImpl implements SubscriptionService {
   @Override
   public Subscription getUserSubscription(Long userId) {
     Subscription subscription = subscriptionRepository.findByUserId(userId).orElseThrow(()->new ProjectException("You haven't subscribed yet"));
+
+    if(!isSubscriptionValid(subscription)){
+      subscription.setPlanType(Plan.FREE);
+      subscription.setSubscriptionStartDate(LocalDate.now());
+      subscription.setSubscriptionEndDate(LocalDate.now().plusMonths(12));
+    }
+    subscriptionRepository.save(subscription);
     return subscription;
   }
 
   @Override
   public Subscription upgradeSubscription(Long userId, Plan planType) {
+    Subscription subscription = getUserSubscription(userId);
+    subscription.setPlanType(planType);
+    subscription.setSubscriptionStartDate(LocalDate.now());
 
-    return null;
+    if(planType.equals(Plan.FREE)){
+      subscription.setSubscriptionEndDate(LocalDate.now().plusMonths(12));
+    }else if(planType.equals(Plan.MONTHLY)){
+      subscription.setSubscriptionEndDate(LocalDate.now().plusMonths(1));
+    }else{
+      subscription.setSubscriptionEndDate(LocalDate.now().plusMonths(12));
+    }
+    return subscription;
   }
 
   @Override
   public boolean isSubscriptionValid(Subscription subscription) {
-    return false;
+    if(subscription.getPlanType().equals(Plan.FREE)) return true;
+
+    LocalDate currentDate = LocalDate.now();
+    LocalDate endDate = subscription.getSubscriptionEndDate();
+
+    return endDate.equals(currentDate) || endDate.isAfter(currentDate);
   }
 }

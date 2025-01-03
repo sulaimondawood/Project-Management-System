@@ -7,6 +7,7 @@ import com.cloud.project_management_system.model.User;
 import com.cloud.project_management_system.exceptions.ProjectException;
 import com.cloud.project_management_system.repository.UserRepository;
 import com.cloud.project_management_system.response.AuthResponse;
+import com.cloud.project_management_system.service.interfaces.SubscriptionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +28,7 @@ public class AuthController {
   private final PasswordEncoder passwordEncoder;
   private final AuthenticationManager authenticationManager;
   private final JwtProvider jwtProvider;
-
+  private final SubscriptionService subscriptionService;
 
   @PostMapping("/register")
   public ResponseEntity<User> register(@RequestBody User user){
@@ -41,6 +42,8 @@ public class AuthController {
     newUser.setPassword(passwordEncoder.encode(user.getPassword()));
 
     User createdUser = userRepository.save(newUser);
+    subscriptionService.createSubscription(createdUser.getId());
+
     return  new ResponseEntity<>(createdUser, HttpStatus.CREATED);
   }
 
