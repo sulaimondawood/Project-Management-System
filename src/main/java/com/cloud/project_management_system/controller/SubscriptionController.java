@@ -41,7 +41,7 @@ public class SubscriptionController {
 
   @PatchMapping("/upgrade")
   public ResponseEntity<MessageResponse> upgradeUserSubscription(@RequestParam Plan planType,
-                                                                 @RequestHeader("Authorization") String jwt){
+                                                                 @RequestHeader("Authorization") String jwt) throws ProjectException{
     User user = userService.findUserProfileByJwt(jwt);
     Subscription subscription = subscriptionService.upgradeSubscription(user.getId(),planType);
     MessageResponse res = new MessageResponse("Subcription upgraded");
