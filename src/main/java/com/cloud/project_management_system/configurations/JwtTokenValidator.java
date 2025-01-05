@@ -22,7 +22,7 @@ import java.io.IOException;
 import java.util.List;
 
 public class JwtTokenValidator extends OncePerRequestFilter {
-  @Value("${app.jwt.key}")
+  @Value("${SECRET_KEY}")
   String SECRET_KEY;
   @Override
   protected void doFilterInternal(HttpServletRequest request,

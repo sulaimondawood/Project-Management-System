@@ -11,14 +11,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping("/api/users")
 @RequiredArgsConstructor
 public class UserController {
 
   private final UserServiceImpl userService;
 
-  @GetMapping
+  @GetMapping("/profile")
   public ResponseEntity<User> getUserProfile(@RequestHeader("Authorization") String jwt) throws ProjectException {
+    System.out.println(jwt);
     User user = userService.findUserProfileByJwt(jwt);
     return ResponseEntity.ok(user);
   }
