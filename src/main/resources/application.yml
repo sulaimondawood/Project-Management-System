@@ -24,3 +24,6 @@ spring:
 app:
   jwt:
     key: ${SECRET_KEY}
+flutterwave:
+  public-key: ${FLW_PKEY}
+  secret-key: ${FLW_SKEY}
