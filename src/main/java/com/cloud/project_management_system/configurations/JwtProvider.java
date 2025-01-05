@@ -15,10 +15,12 @@ import java.util.function.Function;
 @Service
 public class JwtProvider {
   private static final long EXPIRATION_TIME = 1000 * 60 * 60 * 24 * 7;
-  @Value("${SECRET_KEY}")
-  private String secret;
 
-  private final SecretKey SECRET_KEY = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret));
+  private final SecretKey SECRET_KEY;
+
+  public JwtProvider(@Value("${SECRET_KEY}") String secret){
+    this.SECRET_KEY =  Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret));
+  }
 
   public String generateToken(UserDetails userDetails){
    return Jwts.builder().issuedAt(new Date(System.currentTimeMillis()))
