@@ -1,5 +1,6 @@
 package com.cloud.project_management_system.controller;
 
+import com.cloud.project_management_system.exceptions.ProjectException;
 import com.cloud.project_management_system.model.User;
 import com.cloud.project_management_system.service.impl.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +18,7 @@ public class UserController {
   private final UserServiceImpl userService;
 
   @GetMapping
-  public ResponseEntity<User> getUserProfile(@RequestHeader("Authorization") String jwt){
+  public ResponseEntity<User> getUserProfile(@RequestHeader("Authorization") String jwt) throws ProjectException {
     User user = userService.findUserProfileByJwt(jwt);
     return ResponseEntity.ok(user);
   }
